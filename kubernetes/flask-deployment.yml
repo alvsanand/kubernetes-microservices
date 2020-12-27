@@ -1,30 +1,48 @@
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   creationTimestamp: null
   labels:
-    app: flask
-    tier: frontend
+    app.kubernetes.io/component: kubernetes-microservices
+    app.kubernetes.io/instance: flask-app
   name: flask-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: flask
-      tier: frontend
+      app.kubernetes.io/component: kubernetes-microservices
+      app.kubernetes.io/instance: flask-app
+      app.kubernetes.io/name: flask-app
   strategy: {}
   template:
     metadata:
       creationTimestamp: null
       labels:
-        app: flask
-        tier: frontend
+        app.kubernetes.io/component: kubernetes-microservices
+        app.kubernetes.io/instance: flask-app
+        app.kubernetes.io/name: flask-app
     spec:
       containers:
-      - image: logger:latest
-        name: flask-app
-        imagePullPolicy: Never
-        ports:
-        - containerPort: 5000
-        resources: {}
+        - image: flask-app:latest
+          name: flask-app
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 5000
+          env:
+            - name: AUTH_HOST
+              value: "http://sinatra-app:5001"
+            - name: MONGO_HOST
+              value: "mongo"
+            - name: MONGO_PORT
+              value: "27017"
+            - name: MONGO_DB_NAME
+              value: "logger"
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: kubernetes-microservices-secrets
+                  key: SINATRA_SECRET_KEY
+            - name: JWT_EXPIRATION_DELTA
+              value: "3000000"
+          resources: {}
 status: {}

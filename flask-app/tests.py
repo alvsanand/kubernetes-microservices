@@ -1,7 +1,8 @@
-from app import app, db, jwt
+from app import app
 
 import unittest
 import os
+
 
 class AppTests(unittest.TestCase):
     # helpers
@@ -21,6 +22,7 @@ class AppTests(unittest.TestCase):
     def test_invalid_logs_index(self):
         result = self.app.get('/logs')
         self.assertEqual(result.status_code, 401)
+
 
 if __name__ == '__main__':
     unittest.main()

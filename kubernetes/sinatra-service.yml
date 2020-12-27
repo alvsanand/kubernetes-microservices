@@ -1,19 +1,18 @@
 apiVersion: v1
 kind: Service
 metadata:
-  creationTimestamp: null
   labels:
-    app: sinatra
-    tier: frontend
+    app.kubernetes.io/component: kubernetes-microservices
+    app.kubernetes.io/instance: sinatra-app-service
   name: sinatra-app
 spec:
-  ports:
-  - port: 5001
-    protocol: TCP
-    targetPort: 5001
   selector:
-    app: sinatra
-    tier: frontend
+    app.kubernetes.io/component: kubernetes-microservices
+    app.kubernetes.io/instance: sinatra-app
+  ports:
+    - port: 5001
+      protocol: TCP
+      targetPort: 5001
   type: NodePort
 status:
   loadBalancer: {}

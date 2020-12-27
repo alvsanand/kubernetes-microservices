@@ -1,5 +1,7 @@
 # Microservices in kubernetes
+
 Simple Kubernetes-based app that contains 3 services:
+
 1. Flask (Python) microservice (management of applications' logs)
 2. Sinatra (Ruby) microservice (OAuth server - user registration and login)
 3. MongoDB

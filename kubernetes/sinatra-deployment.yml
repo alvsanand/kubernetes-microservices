@@ -1,30 +1,46 @@
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   creationTimestamp: null
   labels:
-    app: sinatra
-    tier: frontend
+    app.kubernetes.io/component: kubernetes-microservices
+    app.kubernetes.io/instance: sinatra-app
   name: sinatra-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: sinatra
-      tier: frontend
+      app.kubernetes.io/component: kubernetes-microservices
+      app.kubernetes.io/instance: sinatra-app
+      app.kubernetes.io/name: sinatra-app
   strategy: {}
   template:
     metadata:
       creationTimestamp: null
       labels:
-        app: sinatra
-        tier: frontend
+        app.kubernetes.io/component: kubernetes-microservices
+        app.kubernetes.io/instance: sinatra-app
+        app.kubernetes.io/name: sinatra-app
     spec:
       containers:
-      - image: sinatra-app:latest
-        name: sinatra-app
-        imagePullPolicy: Never
-        ports:
-        - containerPort: 5001
-        resources: {}
+        - image: sinatra-app:latest
+          name: sinatra-app
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 5001
+          env:
+            - name: APP_PORT
+              value: "5001"
+            - name: MONGO_HOST_PORT
+              value: "mongo:27017"
+            - name: MONGO_DB_NAME
+              value: "logger"
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: kubernetes-microservices-secrets
+                  key: FLASK_SECRET_KEY
+            - name: AUTH_TOKEN_LIFETIME
+              value: "1000000000"
+          resources: {}
 status: {}

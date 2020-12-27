@@ -1,6 +1,6 @@
 FROM python:3.6.2
-ADD . /logger
-WORKDIR /logger
+ADD . /flask-app
+WORKDIR /flask-app
 RUN pip install -r requirements.txt
 
 CMD ["python", "run.py"]

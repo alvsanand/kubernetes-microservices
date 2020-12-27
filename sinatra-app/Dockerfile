@@ -1,4 +1,4 @@
-FROM ruby:2.5.0
+FROM ruby:2.5
 RUN mkdir -p /app
 WORKDIR /app
 COPY Gemfile /app/
